@@ -6,6 +6,8 @@ import com.task.lms.entity.User;
 import com.task.lms.service.UserService;
 import com.task.lms.validator.UserValidator;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserValidator userValidator;
+    private final MessageSource messageSource;
     private final UserService userService;
 
     @PostMapping
@@ -30,7 +33,7 @@ public class UserController {
         userValidator.validate(userRequest, result);
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-            return ResponseEntity.ok(new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Validation failure", errors));
+            return ResponseEntity.ok(new ErrorResponse(HttpStatus.NOT_FOUND.value(), messageSource.getMessage("validation.error.title", null, LocaleContextHolder.getLocale()), errors));
         }
         User user = userService.createUser(userRequest);
         return new ResponseEntity<>(user,  HttpStatus.OK);

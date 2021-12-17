@@ -8,7 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +23,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 @Slf4j
+@AllArgsConstructor
 public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
+
+    private final MessageSource messageSource;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
@@ -30,7 +36,7 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
 
         final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
+        body.put("error", messageSource.getMessage("http.status.unauthorized", null, LocaleContextHolder.getLocale()));
         body.put("message", e.getLocalizedMessage());
         body.put("path", request.getServletPath());
 
@@ -46,7 +52,7 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
 
         final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_FORBIDDEN);
-        body.put("error", "Forbidden");
+        body.put("error", messageSource.getMessage("http.status.forbidden", null, LocaleContextHolder.getLocale()));
         body.put("message", e.getLocalizedMessage());
         body.put("path", request.getServletPath());
 
