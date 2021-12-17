@@ -1,10 +1,14 @@
 package com.task.lms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +18,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
@@ -24,25 +29,27 @@ import java.util.Set;
 )
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
 
     private String fullName;
 
-    @NotBlank(message = "Username is required")
+    @Column(nullable = false)
     private String username;
 
-    @NotBlank(message = "Password is required")
+    @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
-    @Email
-    @NotEmpty(message = "Email is required")
+    @Column(nullable = false)
     private String email;
 
-    @Column(columnDefinition = "TEXT")
+    @Nullable
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String address;
 
+    @JsonIgnore
     private Instant createdAt;
 
     @ManyToMany(fetch = FetchType.LAZY)
