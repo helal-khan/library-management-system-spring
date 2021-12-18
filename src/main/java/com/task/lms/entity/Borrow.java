@@ -1,49 +1,58 @@
 package com.task.lms.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Data
+@Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Borrow {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
-    @NotNull(message = "No of copies is required")
+    @Column(nullable = false)
     private int copies;
 
-    private Date issueDate;
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate issueDate;
 
-    private Date returnDate;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "borrowed_by", referencedColumnName = "id")
-    private User borrowedBy;
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate returnDate;
 
     private Boolean isReturned;
 
+    @JsonIgnore
     private Instant createdAt;
+
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "borrowed_by", referencedColumnName = "id")
+    @JsonIgnore
+    private User borrowedBy;
 
 }

@@ -21,6 +21,19 @@ public class GlobalExceptionHandler {
 
     private final MyMessage msg;
 
+    @ExceptionHandler(value = BookNotAvailableException.class)
+    public ResponseEntity<?> handleBookNotAvailableException(BookNotAvailableException ex, WebRequest request) {
+        ErrorResponse errorRes = ErrorResponse
+                .builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(msg.get("validation.error.title"))
+                .errors(Arrays.asList(ex.getMessage().split("˜")))
+                .path(getPath(request))
+                .timestamp(new Date())
+                .build();
+        return new ResponseEntity<Object>(errorRes, new HttpHeaders(), errorRes.getStatus());
+    }
+
     @ExceptionHandler(value = GlobalValidationException.class)
     public ResponseEntity<?> handleValidationException(GlobalValidationException ex, WebRequest request) {
         ErrorResponse errorRes = ErrorResponse

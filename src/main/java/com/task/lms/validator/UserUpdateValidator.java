@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
-public class UserValidator implements Validator {
+public class UserUpdateValidator implements Validator {
 
     private final UserRepository userRepository;
     private final MyMessage msg;
@@ -36,20 +36,11 @@ public class UserValidator implements Validator {
         if (StringUtils.isBlank(userRequest.getUsername())) {
             errors.rejectValue("username", "username.is.required", msg.get("user.username.required"));
         }
-        if (userRepository.existsByUsername(userRequest.getUsername())) {
-            errors.rejectValue("username", "username.is.taken", msg.get("user.username.taken"));
-        }
-        if (StringUtils.isBlank(userRequest.getPassword())) {
-            errors.rejectValue("password", "password.is.required", msg.get("user.password.required"));
-        }
         if (StringUtils.isBlank(userRequest.getEmail())) {
             errors.rejectValue("email", "email.is.required", msg.get("user.email.required"));
         }
         if (!pattern.matcher(userRequest.getEmail()).matches()) {
             errors.rejectValue("email", "email.is.invalid", msg.get("user.email.invalid"));
-        }
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
-            errors.rejectValue("email", "email.is.exist", msg.get("user.email.exist"));
         }
         if (StringUtils.isBlank(userRequest.getAddress())) {
             errors.rejectValue("address", "address.is.required", msg.get("user.address.required"));

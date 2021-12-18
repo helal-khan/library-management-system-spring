@@ -33,6 +33,11 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(msg.get("book.error.notfound")+id));
     }
 
+    @Transactional(readOnly = true)
+    public List<Book> searchByNameLike(String name) {
+        return bookRepository.searchByNameLike(name);
+    }
+
     public Book createBook(BookRequest bookRequest){
         Book book = Book.builder()
                         .title(bookRequest.getTitle())

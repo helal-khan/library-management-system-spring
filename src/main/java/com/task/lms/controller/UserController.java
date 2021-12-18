@@ -4,6 +4,7 @@ import com.task.lms.dto.UserRequest;
 import com.task.lms.entity.User;
 import com.task.lms.exception.GlobalValidationException;
 import com.task.lms.service.UserService;
+import com.task.lms.validator.UserUpdateValidator;
 import com.task.lms.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserValidator userValidator;
+    private final UserUpdateValidator userUpdateValidator;
     private final UserService userService;
 
     @GetMapping
@@ -51,7 +53,7 @@ public class UserController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest, BindingResult result) {
-        userValidator.validate(userRequest, result);
+        userUpdateValidator.validate(userRequest, result);
         if (result.hasErrors()) {
             throw new GlobalValidationException(getErrors(result));
         }

@@ -9,6 +9,7 @@ import com.task.lms.repository.RoleRepository;
 import com.task.lms.repository.UserRepository;
 import com.task.lms.util.MyMessage;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(msg.get("user.error.notfound")+id));
+    }
+
+    @Transactional(readOnly = true)
+    public User getAdminUser() {
+        return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new ResourceNotFoundException(msg.get("user.error.notfound")));
     }
 
     public User createUser(UserRequest userRequest){

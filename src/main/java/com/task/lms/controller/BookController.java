@@ -4,9 +4,11 @@ import com.task.lms.dto.BookRequest;
 import com.task.lms.entity.Book;
 import com.task.lms.exception.GlobalValidationException;
 import com.task.lms.service.BookService;
+import com.task.lms.validator.BookUpdateValidator;
 import com.task.lms.validator.BookValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,17 +27,24 @@ public class BookController {
 
     private final BookService bookService;
     private final BookValidator bookValidator;
+    private final BookUpdateValidator bookUpdateValidator;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<Book>> getAllUsers() {
+    public ResponseEntity<List<Book>> getAllBooks() {
         return status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<Book> getUser(@PathVariable Long id) {
+    public ResponseEntity<Book> getBook(@PathVariable Long id) {
         return status(HttpStatus.OK).body(bookService.getBook(id));
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<Book>> getBooksByName(@RequestParam("name") String name) {
+        return status(HttpStatus.OK).body(bookService.searchByNameLike(name));
     }
 
     @PostMapping
@@ -51,7 +60,7 @@ public class BookController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest, BindingResult result) {
-        bookValidator.validate(bookRequest, result);
+        bookUpdateValidator.validate(bookRequest, result);
         if (result.hasErrors()) {
             throw new GlobalValidationException(getErrors(result));
         }
