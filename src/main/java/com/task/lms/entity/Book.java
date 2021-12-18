@@ -1,5 +1,8 @@
 package com.task.lms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
@@ -16,6 +17,12 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name"),
+    }
+)
 public class Book {
 
     @Id
@@ -31,8 +38,9 @@ public class Book {
     @Column(nullable = false)
     private int copies;
 
+    @JsonIgnore
     private Instant createdAt;
 
-    @OneToOne(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private BookMeta booMeta;
+    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private BookMeta booKMeta;
 }

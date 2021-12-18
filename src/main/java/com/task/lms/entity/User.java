@@ -9,9 +9,6 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,9 +49,9 @@ public class User {
     @JsonIgnore
     private Instant createdAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(  name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName ="id"))
     private Set<Role> roles = new HashSet<>();
 }
