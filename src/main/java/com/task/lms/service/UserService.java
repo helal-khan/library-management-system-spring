@@ -5,6 +5,7 @@ import com.task.lms.entity.ERole;
 import com.task.lms.entity.Role;
 import com.task.lms.entity.User;
 import com.task.lms.exception.ResourceNotFoundException;
+import com.task.lms.repository.BorrowRepository;
 import com.task.lms.repository.RoleRepository;
 import com.task.lms.repository.UserRepository;
 import com.task.lms.util.MyMessage;
@@ -27,11 +28,17 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final BorrowRepository borrowRepository;
     private final MyMessage msg;
 
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getUsersByIssuedBook(Long bookId) {
+        return borrowRepository.issuedToUsersByBook(bookId);
     }
 
     @Transactional(readOnly = true)

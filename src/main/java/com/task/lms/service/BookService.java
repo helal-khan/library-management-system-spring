@@ -6,6 +6,7 @@ import com.task.lms.exception.ResourceNotFoundException;
 import com.task.lms.repository.BookMetaRepository;
 import com.task.lms.repository.BookRepository;
 
+import com.task.lms.repository.BorrowRepository;
 import com.task.lms.util.MyMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMetaRepository bookMetaRepository;
+    private final BorrowRepository borrowRepository;
     private final MyMessage msg;
 
     @Transactional(readOnly = true)
@@ -29,13 +31,22 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
+    public List<Book> getAllBooksByIssued() {
+        return borrowRepository.findIssuedBook();
+    }
+
+    @Transactional(readOnly = true)
     public Book getBook(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(msg.get("book.error.notfound")+id));
     }
 
     @Transactional(readOnly = true)
-    public List<Book> searchByNameLike(String name) {
-        return bookRepository.searchByNameLike(name);
+    public List<Book> searchByNameOrAuthor(String name) {
+        List<Book> books = bookRepository.searchByNameLike(name);
+        if(books.isEmpty()){
+            books = bookRepository.searchByAuthorLike(name);
+        }
+        return books;
     }
 
     public Book createBook(BookRequest bookRequest){

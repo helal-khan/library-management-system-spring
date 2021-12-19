@@ -12,7 +12,6 @@ public class LibraryManagementSystemSpringApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(LibraryManagementSystemSpringApplication.class, args);
-
 		DispatcherServlet dispatcherServlet = (DispatcherServlet)ctx.getBean("dispatcherServlet");
 		dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
 	}

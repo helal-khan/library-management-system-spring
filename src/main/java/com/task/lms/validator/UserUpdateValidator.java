@@ -1,7 +1,6 @@
 package com.task.lms.validator;
 
 import com.task.lms.dto.UserRequest;
-import com.task.lms.repository.UserRepository;
 import com.task.lms.util.MyMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserUpdateValidator implements Validator {
 
-    private final UserRepository userRepository;
     private final MyMessage msg;
     private final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     Pattern pattern = Pattern.compile(regex);

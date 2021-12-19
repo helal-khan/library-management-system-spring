@@ -1,7 +1,6 @@
 package com.task.lms.validator;
 
 import com.task.lms.dto.BorrowRequest;
-import com.task.lms.repository.BorrowRepository;
 import com.task.lms.util.MyMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

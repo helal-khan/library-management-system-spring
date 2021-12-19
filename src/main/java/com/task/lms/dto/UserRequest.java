@@ -1,6 +1,5 @@
 package com.task.lms.dto;
 
-import com.task.lms.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

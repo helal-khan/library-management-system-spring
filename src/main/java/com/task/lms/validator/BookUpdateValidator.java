@@ -1,7 +1,6 @@
 package com.task.lms.validator;
 
 import com.task.lms.dto.BookRequest;
-import com.task.lms.repository.BookRepository;
 import com.task.lms.util.MyMessage;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +12,6 @@ import org.springframework.validation.Validator;
 @AllArgsConstructor
 public class BookUpdateValidator implements Validator {
 
-    private final BookRepository bookRepository;
     private final MyMessage msg;
 
     @Override

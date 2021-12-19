@@ -34,6 +34,13 @@ public class UserController {
         return status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
+    @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @RequestMapping("/issued/{bookId}")
+    public ResponseEntity<List<User>> getUsersByIssuedBook(@PathVariable Long bookId) {
+        return status(HttpStatus.OK).body(userService.getUsersByIssuedBook(bookId));
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUser(@PathVariable Long id) {

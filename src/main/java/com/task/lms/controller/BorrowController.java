@@ -1,31 +1,19 @@
 package com.task.lms.controller;
 
-import com.task.lms.dto.BookRequest;
 import com.task.lms.dto.BorrowRequest;
-import com.task.lms.entity.Book;
 import com.task.lms.entity.Borrow;
 import com.task.lms.exception.GlobalValidationException;
-import com.task.lms.exception.ResourceNotFoundException;
-import com.task.lms.repository.BookRepository;
-import com.task.lms.repository.BorrowRepository;
-import com.task.lms.service.BookService;
 import com.task.lms.service.BorrowService;
-import com.task.lms.validator.BookValidator;
 import com.task.lms.validator.BorrowValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Date;
 import java.util.stream.Collectors;
-
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController

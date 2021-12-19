@@ -8,7 +8,6 @@ import com.task.lms.validator.BookUpdateValidator;
 import com.task.lms.validator.BookValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +34,13 @@ public class BookController {
         return status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
+    @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @RequestMapping("/issued")
+    public ResponseEntity<List<Book>> getAllBooksByIssued() {
+        return status(HttpStatus.OK).body(bookService.getAllBooksByIssued());
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
@@ -43,8 +49,8 @@ public class BookController {
 
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<Book>> getBooksByName(@RequestParam("name") String name) {
-        return status(HttpStatus.OK).body(bookService.searchByNameLike(name));
+    public ResponseEntity<List<Book>> getBooksByNameOrAuthor(@RequestParam("query") String query) {
+        return status(HttpStatus.OK).body(bookService.searchByNameOrAuthor(query));
     }
 
     @PostMapping
