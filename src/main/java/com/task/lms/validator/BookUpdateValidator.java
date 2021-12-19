@@ -26,9 +26,6 @@ public class BookUpdateValidator implements Validator {
         if (StringUtils.isBlank(bookRequest.getTitle())) {
             errors.rejectValue("title", "title.is.required", msg.get("book.title.required"));
         }
-        if (StringUtils.isBlank(bookRequest.getName())) {
-            errors.rejectValue("name", "name.is.required", msg.get("book.name.required"));
-        }
         if (bookRequest.getCopies() == null) {
             errors.rejectValue("copies", "copies.is.required", msg.get("book.copies.required"));
         }

@@ -32,7 +32,7 @@ public class BookMeta {
     @JsonIgnore
     private Instant createdAt;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 }

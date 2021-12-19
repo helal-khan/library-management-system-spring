@@ -63,7 +63,7 @@ public class BookService {
                                     .isbn(bookRequest.getBookMeta().getIsbn())
                                     .createdAt(Instant.now())
                                     .build();
-        book.setBooKMeta(bookMeta);
+        book.setBookMeta(bookMeta);
         bookMeta.setBook(book);
         bookMetaRepository.save(bookMeta);
         return bookRepository.save(book);
@@ -73,16 +73,15 @@ public class BookService {
         return bookRepository.findById(id)
                 .map(book -> {
                     book.setTitle(bookRequest.getTitle());
-                    book.setName(bookRequest.getName());
                     book.setCopies(bookRequest.getCopies());
                     BookMeta bookMeta = BookMeta.builder()
-                            .id(book.getBooKMeta().getId())
+                            .id(book.getBookMeta().getId())
                             .author(bookRequest.getBookMeta().getAuthor())
                             .publisher(bookRequest.getBookMeta().getPublisher())
                             .edition(bookRequest.getBookMeta().getEdition())
                             .isbn(bookRequest.getBookMeta().getIsbn())
                             .build();
-                    book.setBooKMeta(bookMeta);
+                    book.setBookMeta(bookMeta);
                     bookMeta.setBook(book);
                     bookMetaRepository.save(bookMeta);
                     return bookRepository.save(book);

@@ -42,5 +42,5 @@ public class Book {
     private Instant createdAt;
 
     @OneToOne(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private BookMeta booKMeta;
+    private BookMeta bookMeta;
 }

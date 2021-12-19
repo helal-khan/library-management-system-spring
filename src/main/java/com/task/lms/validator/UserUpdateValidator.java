@@ -31,15 +31,6 @@ public class UserUpdateValidator implements Validator {
         if (StringUtils.isBlank(userRequest.getFullName())) {
             errors.rejectValue("fullName", "fullName.is.required", msg.get("user.fullName.required"));
         }
-        if (StringUtils.isBlank(userRequest.getUsername())) {
-            errors.rejectValue("username", "username.is.required", msg.get("user.username.required"));
-        }
-        if (StringUtils.isBlank(userRequest.getEmail())) {
-            errors.rejectValue("email", "email.is.required", msg.get("user.email.required"));
-        }
-        if (!pattern.matcher(userRequest.getEmail()).matches()) {
-            errors.rejectValue("email", "email.is.invalid", msg.get("user.email.invalid"));
-        }
         if (StringUtils.isBlank(userRequest.getAddress())) {
             errors.rejectValue("address", "address.is.required", msg.get("user.address.required"));
         }
