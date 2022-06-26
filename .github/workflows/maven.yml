@@ -13,19 +13,6 @@ jobs:
   build:
   
     runs-on: ubuntu-latest
-    
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_DATABASE: lms
-          MYSQL_USERNAME: root
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_ALLOW_EMPTY_PASSWORD: no
-        ports:
-        - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
 
     steps:
     - uses: actions/checkout@v2
@@ -39,3 +26,15 @@ jobs:
         
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots package
+      
+    - uses: samin/mysql-action@v1
+      with:
+        host port: 3306 # Optional, default value is 3306. The port of host
+        container port: 3306 # Optional, default value is 3306. The port of container
+        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+        collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+        mysql database: 'lms' # Optional, default value is "test". The specified database which will be create
+        mysql root password: 'rootpassword' # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Of course you can use secrets, too
+        mysql password: 'rootpassword' # Required if "mysql user" exists. The password for the "mysql user"
