@@ -1,27 +1,21 @@
-version: '3.3'
+version: '3.7'
 
 services:
-  db:
-    image: mysql:latest
+  mysql:
     container_name: mysql-db
+    image: mysql:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpass
+      MYSQL_DATABASE: 'lms'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'rootpass'
     ports:
       - "3306:3306"
     restart: always
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: my-php-myadmin
-    ports:
-      - "8082:80"
-    restart: always
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpass
-
+    networks:
+      - mysql
+    volumes:
+      - ./my-sql-data:/var/lib/mysql
 
   librarymanagementsystem:
     image: library-management-system-img
@@ -32,10 +26,15 @@ services:
     ports:
       - "8080:8080"
     restart: always
-
+    networks:
+      - app
+      - mysql
     depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/lms?createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpass
+      - mysql
+
+## Network Config
+networks:
+  mysql:
+    driver: bridge
+  app:
+    driver: bridge
